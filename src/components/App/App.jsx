@@ -3,20 +3,29 @@ import 'materialize-css/dist/css/materialize.min.css';
 import './App.css';
 import BmiTracker from '../BmiTraker/BmiTracker';
 import { MemoryContext, MemoryService } from '../../services/MemoryService';
+import {
+	BmiStateContext,
+	BmiStateService,
+} from '../../services/BmiStateService';
 
 const App = () => {
 	return (
+		//TODO Set up multiple contexts.
 		<MemoryContext.Provider value={{ MemoryService }}>
-			<div className="container">
-				<div className="row center">
-					<h1 className="white-text"> BMI Tracker </h1>
-				</div>
-				<div className="row">
-					<div className="col m12 s12">
-						<BmiTracker />
+			<BmiStateContext.Provider
+				value={{ BmiStateService: new BmiStateService() }}
+			>
+				<div className="container">
+					<div className="row center">
+						<h1 className="white-text"> BMI Tracker </h1>
+					</div>
+					<div className="row">
+						<div className="col m12 s12">
+							<BmiTracker />
+						</div>
 					</div>
 				</div>
-			</div>
+			</BmiStateContext.Provider>
 		</MemoryContext.Provider>
 	);
 };

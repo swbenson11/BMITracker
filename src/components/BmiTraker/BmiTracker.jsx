@@ -1,49 +1,48 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import 'materialize-css/dist/css/materialize.min.css';
 import BmiForm from '../BmiForm/BmiForm';
 import Info from '../Info/Info';
 import Bar from '../Bar/Bar';
 import { MemoryContext } from '../../services/MemoryService';
+import { BmiStateContext } from '../../services/BmiStateService';
 
 const BmiTracker = () => {
 	const { MemoryService } = useContext(MemoryContext);
+	const { BmiStateService } = useContext(BmiStateContext);
 
-	const initialState = () => MemoryService.readData('data') || [];
-	const [state, setState] = useState(initialState);
+	const [state, setState] = useState(BmiStateService.entries);
 	const [data, setData] = useState({});
 
 	// TODO move this to another file
 	useEffect(() => {
-		MemoryService.saveData('data', state);
-		const date = state.map((obj) => obj.date);
-		const bmi = state.map((obj) => obj.bmi);
-		console.log('RAN' + bmi);
+		MemoryService.saveData('data', BmiStateService.entries);
+		// This is redundant, but I need to reference state to trigger the effect.
+		// This make having the external state pretty stupid, but I wanted to test out multiple context
+		// And test the reactivness of react's hooks.
+		BmiStateService.setEntries(state);
+
+		const date = BmiStateService.entries.map((obj) => obj.date);
+		const bmi = BmiStateService.entries.map((obj) => obj.bmi);
 
 		let newData = { date, bmi };
 		setData(newData);
-	}, [MemoryService, state]);
+	}, [MemoryService, BmiStateService, state]);
 
 	const handleChange = (val) => {
-		let heightInM = val.height / 100;
-		val.bmi = (val.weight / (heightInM * heightInM)).toFixed(2);
-		val.id = uuidv4();
-		let newVal = [...state, val];
-		let len = newVal.length;
-		if (len > 7) newVal = newVal.slice(1, len);
-		setState(newVal);
+		BmiStateService.add(val);
+		setState(BmiStateService.entries);
 	};
 
 	const handleDelete = (id) => {
-		MemoryService.saveData('lastState', state);
-		let newState = state.filter((i) => {
-			return i.id !== id;
-		});
-		setState(newState);
+		MemoryService.saveData('lastState', BmiStateService.entries);
+		BmiStateService.delete(id);
+		setState(BmiStateService.entries);
 	};
 
 	const handleUndo = () => {
-		setState(MemoryService.readData('lastState'));
+		const lastState = MemoryService.readData('lastState');
+		setState(lastState);
+		BmiStateService.setEntries(lastState);
 	};
 
 	return (
@@ -55,9 +54,9 @@ const BmiTracker = () => {
 					<h4 className="white-text">7 Day Data</h4>
 				</div>
 				<div className="data-container row">
-					{state.length > 0 ? (
+					{BmiStateService.entries.length > 0 ? (
 						<>
-							{state.map((info) => (
+							{BmiStateService.entries.map((info) => (
 								<Info
 									key={info.id}
 									id={info.id}
