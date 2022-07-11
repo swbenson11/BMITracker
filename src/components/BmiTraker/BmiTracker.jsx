@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import 'materialize-css/dist/css/materialize.min.css';
 import BmiForm from '../BmiForm/BmiForm';
 import Info from '../Info/Info';
 import Bar from '../Bar/Bar';
-import { MemoryService } from '../../services/MemoryService';
+import { MemoryContext } from '../../services/MemoryService';
 
 const BmiTracker = () => {
-	// TODO make this work with context
+	const { MemoryService } = useContext(MemoryContext);
+
 	const initialState = () => MemoryService.readData('data') || [];
 	const [state, setState] = useState(initialState);
 	const [data, setData] = useState({});
@@ -21,7 +22,7 @@ const BmiTracker = () => {
 
 		let newData = { date, bmi };
 		setData(newData);
-	}, [state]);
+	}, [MemoryService, state]);
 
 	const handleChange = (val) => {
 		let heightInM = val.height / 100;

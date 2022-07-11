@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const MemoryService = {
 	readData: (key) => {
 		if (!localStorage) return;
@@ -19,5 +21,7 @@ export const MemoryService = {
 		}
 	},
 };
+
+export const MemoryContext = React.createContext(MemoryService);
 
 export default MemoryService;
