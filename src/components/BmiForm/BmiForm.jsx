@@ -5,13 +5,13 @@ import '../App/App.css';
 const initialValues = {
 	weight: '',
 	height: '',
-	date: ''
-}
+	date: '',
+};
 
 const BmiForm = ({ change }) => {
 	const [state, setState] = useState(initialValues);
 
-	const handleChange = e => {
+	const handleChange = (e) => {
 		let { value, name } = e.target;
 		if (value > 999) {
 			value = 999;
@@ -20,7 +20,7 @@ const BmiForm = ({ change }) => {
 		setState({
 			...state,
 			[name]: value,
-			date
+			date,
 		});
 	};
 
@@ -31,7 +31,7 @@ const BmiForm = ({ change }) => {
 
 	return (
 		<>
-			<div className="row">
+			<div className="row ">
 				<div className="col m6 s12">
 					<label htmlFor="weight">Weight (in kg)</label>
 					<input
@@ -76,7 +76,7 @@ const BmiForm = ({ change }) => {
 };
 
 BmiForm.propTypes = {
-	change: PropTypes.func.isRequired
+	change: PropTypes.func.isRequired,
 };
 
 export default BmiForm;
