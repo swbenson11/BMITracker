@@ -7,7 +7,7 @@ import { MemoryContext, MemoryService } from '../../services/MemoryService';
 
 const App = () => {
 	return (
-		<MemoryContext.Provider value={{ MemoryService }}>
+		<MemoryContext.Provider value={MemoryService}>
 			<div className="container">
 				<div className="row center">
 					<Header>BMI Tracker</Header>

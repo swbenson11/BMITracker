@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import 'materialize-css/dist/css/materialize.min.css';
 import BmiForm from '../BmiForm/BmiForm';
@@ -7,21 +7,16 @@ import Bar from '../Bar/Bar';
 import { MemoryContext } from '../../services/MemoryService';
 
 const BmiTracker = () => {
-	const { MemoryService } = useContext(MemoryContext);
+	const MemoryService = React.useContext(MemoryContext);
 
 	const initialState = () => MemoryService.readData('data') || [];
-	const [state, setState] = useState(initialState);
-	const [data, setData] = useState({});
-	console.log('constructor run');
+	const [state, setState] = React.useState(initialState);
+	const [data, setData] = React.useState({});
 
-	// TODO move this to another file
-	useEffect(() => {
-		console.log('effect run ');
-
+	React.useEffect(() => {
 		MemoryService.saveData('data', state);
 		const date = state.map((obj) => obj.date);
 		const bmi = state.map((obj) => obj.bmi);
-		console.log('RAN' + bmi);
 
 		let newData = { date, bmi };
 		setData(newData);
@@ -52,7 +47,7 @@ const BmiTracker = () => {
 	return (
 		<div>
 			<BmiForm change={handleChange} />
-			<Bar labelData={data.date} bmiData={data.bmi} />
+			{/* <Bar labelData={data.date} bmiData={data.bmi} /> */}
 			<div>
 				<div className="row center">
 					<h4 className="white-text">7 Day Data</h4>
