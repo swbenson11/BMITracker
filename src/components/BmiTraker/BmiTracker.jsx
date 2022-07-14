@@ -12,9 +12,12 @@ const BmiTracker = () => {
 	const initialState = () => MemoryService.readData('data') || [];
 	const [state, setState] = useState(initialState);
 	const [data, setData] = useState({});
+	console.log('constructor run');
 
 	// TODO move this to another file
 	useEffect(() => {
+		console.log('effect run ');
+
 		MemoryService.saveData('data', state);
 		const date = state.map((obj) => obj.date);
 		const bmi = state.map((obj) => obj.bmi);
