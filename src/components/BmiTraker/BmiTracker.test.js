@@ -65,9 +65,17 @@ describe('BmiTracker', () => {
 
 	// Test of useEffect
 	it('Should update memory service when BMI is updated', () => {
-		// Fixes issue with useEffect not firing
-		// The signature is identical to useEffect, but it fires synchronously after all DOM mutations. Use this to read layout from the DOM and synchronously re-render. Updates scheduled inside useLayoutEffect will be flushed synchronously, before the browser has a chance to paint.
-		// https://github.com/testing-library/react-testing-library/issues/215
+		// Fixes issue with useEffect not firing. From the documentation
+		// the function passed to useEffect fires after layout and paint, during a deferred event.
+		// However, not all effects can be deferred. For example, a DOM mutation that is visible to the user
+		// must fire synchronously before the next paint so that the user does not perceive a visual inconsistency.
+		// (The distinction is conceptually similar to passive versus active event listeners.)
+		// For these types of effects, React provides one additional Hook called useLayoutEffect.
+		// It has the same signature as useEffect, and only differs in when it is fired.
+		// https://reactjs.org/docs/hooks-reference.html#uselayouteffect
+		// beforeAll(() => jest.spyOn(React, 'useEffect').mockImplementation(React.useLayoutEffect))
+		// afterAll(() => React.useEffect.mockRestore())
+
 		jest.spyOn(React, 'useEffect').mockImplementation(
 			React.useLayoutEffect
 		);
