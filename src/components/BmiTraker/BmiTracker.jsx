@@ -5,22 +5,14 @@ import BmiForm from '../BmiForm/BmiForm';
 import Info from '../Info/Info';
 import Bar from '../Bar/Bar';
 import { MemoryContext } from '../../services/MemoryService';
+import { UpdateDataHook } from './UpdateDataHook';
 
 const BmiTracker = () => {
 	const MemoryService = React.useContext(MemoryContext);
 
 	const initialState = () => MemoryService.readData('data') || [];
 	const [state, setState] = React.useState(initialState);
-	const [data, setData] = React.useState({});
-
-	React.useEffect(() => {
-		MemoryService.saveData('data', state);
-		const date = state.map((obj) => obj.date);
-		const bmi = state.map((obj) => obj.bmi);
-
-		let newData = { date, bmi };
-		setData(newData);
-	}, [MemoryService, state]);
+	const data = UpdateDataHook(state, MemoryService);
 
 	const handleChange = (val) => {
 		let heightInM = val.height / 100;
