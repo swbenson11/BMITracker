@@ -3,6 +3,11 @@ import { shallow, mount, render } from 'enzyme';
 import BmiTracker from './BmiTracker';
 import { MemoryServiceMock } from '../../mocks/services/MemoryService.mock';
 import { MemoryContext } from '../../services/MemoryService';
+// <Bar isn't playing nicely with jest. Rather then try and fix that, we don't really care in
+// BmiTrack. Not it's concern. So we'll just mock out bar, and avoid the issue
+jest.mock('../Bar/Bar', () => (props) => {
+	return <bar />;
+});
 
 // TODO restore Bar, restore afterEach
 

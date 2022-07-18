@@ -39,7 +39,7 @@ const BmiTracker = () => {
 	return (
 		<div>
 			<BmiForm change={handleChange} />
-			{/* <Bar labelData={data.date} bmiData={data.bmi} /> */}
+			<Bar labelData={data.date} bmiData={data.bmi} />
 			<div>
 				<div className="row center">
 					<h4 className="white-text">7 Day Data</h4>
